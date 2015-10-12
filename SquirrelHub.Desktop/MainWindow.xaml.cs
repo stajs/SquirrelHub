@@ -32,6 +32,8 @@ namespace SquirrelHub.Desktop
 			if (!bool.TryParse(ConfigurationManager.AppSettings["IsCanary"], out isCanary))
 				isCanary = false;
 
+			Log.Text += "\nisCanary: " + isCanary;
+
 			try
 			{
 				using (var updateManager = await UpdateManager.GitHubUpdateManager("https://github.com/stajs/SquirrelHub", prerelease: isCanary))
@@ -54,6 +56,8 @@ namespace SquirrelHub.Desktop
 						}
 						else
 						{
+							Log.Text += "\nCount of releases: " + updateInfo.ReleasesToApply.Count;
+
 							var latestVersion = updateInfo
 								.ReleasesToApply
 								.OrderByDescending(u => u.Version)
