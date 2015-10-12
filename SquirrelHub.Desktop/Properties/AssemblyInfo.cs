@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("SquirrelHub.Desktop")]
 [assembly: AssemblyDescription("Testing")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("stajs")]
 [assembly: AssemblyProduct("SquirrelHub.Desktop")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
