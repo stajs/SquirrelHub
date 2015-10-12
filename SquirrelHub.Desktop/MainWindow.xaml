@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="SquirrelHub" Height="350" Width="525"
 		  Icon="App.ico">
-    <Grid>
-        
-    </Grid>
+   <Grid>
+      <TextBlock x:Name="Log" TextWrapping="Wrap" Margin="10" ScrollViewer.CanContentScroll="True" />
+   </Grid>
 </Window>

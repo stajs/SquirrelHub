@@ -19,8 +19,6 @@ namespace SquirrelHub.Desktop
 {
 	public partial class MainWindow : Window
 	{
-		public string SquirrelHubVersion { get; set; }
-
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -40,11 +38,7 @@ namespace SquirrelHub.Desktop
 				{
 					var currentVersion = updateManager.CurrentlyInstalledVersion();
 
-					SquirrelHubVersion = "Checking for update...";
-
-					var hasFailed = false;
-					var failTitle = "";
-					var failMessage = "";
+					Log.Text += "\nChecking for update...";
 
 					try
 					{
@@ -52,11 +46,11 @@ namespace SquirrelHub.Desktop
 
 						if (updateInfo == null)
 						{
-							SquirrelHubVersion = string.Format("No updates found, staying on v{0}", currentVersion);
+							Log.Text += string.Format("\nNo updates found, staying on v{0}", currentVersion);
 						}
 						else if (!updateInfo.ReleasesToApply.Any())
 						{
-							SquirrelHubVersion = string.Format("You're up to date! v{0}", currentVersion);
+							Log.Text += string.Format("\nYou're up to date! v{0}", currentVersion);
 						}
 						else
 						{
@@ -68,33 +62,22 @@ namespace SquirrelHub.Desktop
 
 							if (currentVersion != null && currentVersion > latestVersion)
 							{
-								SquirrelHubVersion = string.Format("Only found earlier version v{0}, staying on v{1}", latestVersion, currentVersion);
+								Log.Text += string.Format("\nOnly found earlier version v{0}, staying on v{1}", latestVersion, currentVersion);
 								return;
 							}
 
-							SquirrelHubVersion = string.Format("Updating to v{0}", latestVersion);
+							Log.Text += string.Format("\nUpdating to v{0}", latestVersion);
 
 							var releases = updateInfo.ReleasesToApply;
 							await updateManager.DownloadReleases(releases);
 							await updateManager.ApplyReleases(updateInfo);
 
-							SquirrelHubVersion = string.Format("Restart to finish update from v{0} to v{1}", currentVersion, latestVersion);
+							Log.Text += string.Format("\nRestart to finish update from v{0} to v{1}", currentVersion, latestVersion);
 						}
 					}
 					catch (Exception e)
 					{
-						// TODO: Have better error handling.
-						SquirrelHubVersion = "See https://github.com/lic-nz/Malone/wiki/Help-with-updating-Malone";
-
-						hasFailed = true;
-						failTitle = e.Message;
-						failMessage = string.Format("currentVersion: {0}\n\n{1}", currentVersion, e.StackTrace);
-					}
-
-					if (hasFailed && isCanary)
-					{
-						// Can't await in a catch block. Move back when on C# 6.
-						//await _dialogManager.Show(failTitle, failMessage);
+						Log.Text += string.Format("\ncurrentVersion: {0}\n\n{1}", currentVersion, e.StackTrace);
 					}
 				}
 			}
@@ -102,7 +85,7 @@ namespace SquirrelHub.Desktop
 			{
 				if (e.Message.Contains("Update.exe not found"))
 				{
-					SquirrelHubVersion = "Update disabled";
+					Log.Text += "\nUpdate disabled";
 					return;
 				}
 
